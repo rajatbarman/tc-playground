@@ -1,0 +1,81 @@
+directive @server(
+  apolloTracing: Boolean
+  cacheControlHeader: Boolean
+  graphiql: Boolean
+  introspection: Boolean
+  queryValidation: Boolean
+  responseValidation: Boolean
+  batchRequests: Boolean
+  globalResponseTimeout: Int
+  workers: Int
+  port: Int
+  vars: [KeyValue]
+  responseHeaders: [KeyValue]
+  hostname: String
+  version: HttpVersion
+  cert: String
+  key: String
+) on SCHEMA
+
+enum HttpVersion {
+  HTTP1
+  HTTP2
+}
+
+directive @upstream(
+  allowedHeaders: [String]
+  connectTimeout: Int
+  keepAliveInterval: Int
+  keepAliveTimeout: Int
+  keepAliveWhileIdle: Boolean
+  poolIdleTimeout: Int
+  poolMaxIdlePerHost: Int
+  proxy: Proxy
+  tcpKeepAlive: Int
+  timeout: Int
+  userAgent: String
+  baseURL: String
+  httpCache: Boolean
+  batch: Batch
+) on SCHEMA
+
+directive @http(
+  path: String!
+  method: Method = GET
+  query: [KeyValue]
+  body: String
+  baseURL: String
+  headers: [KeyValue]
+  groupBy: [String!]
+) on FIELD_DEFINITION
+directive @addField(name: String, path: [String]!) on OBJECT
+directive @modify(omit: Boolean, name: String) on FIELD_DEFINITION
+directive @groupBy(path: [String!]) on FIELD_DEFINITION
+directive @const(data: JSON) on FIELD_DEFINITION
+
+enum Method {
+  GET
+  POST
+  PUT
+  DELETE
+  PATCH
+  HEAD
+  OPTIONS
+}
+
+input Proxy {
+  url: String
+}
+
+input KeyValue {
+  key: String!
+  value: String!
+}
+
+input Batch {
+  maxSize: Int
+  delay: Int
+  headers: [String]
+}
+
+scalar JSON
